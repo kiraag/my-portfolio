@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio - Sai Kiran Danda</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <h1>Sai Kiran Danda</h1>
+    <h2>AWS Cloud & DevOps Engineer</h2>
+    <p>Results-driven professional with expertise in optimizing cloud infrastructure and DevOps automation.</p>
+  </header>
+
+  <!-- About Section -->
+  <section>
+    <h3>About Me</h3>
+    <p>Proven track record in enhancing operational efficiency and optimizing cloud infrastructure. Expertise in deployment automation, team collaboration, and creating scalable solutions.</p>
+  </section>
+
+  <!-- Work Experience Section -->
+  <section>
+    <h3>Work Experience</h3>
+    <ul>
+      <li>
+        <strong>P J Quantum Solutions (Dec 2019 - Present)</strong>
+        <ul>
+          <li>Implemented CI/CD pipelines using Jenkins and GitLab, automating deployment processes.</li>
+          <li>Managed Infrastructure as Code (IaC) with Terraform and CloudFormation.</li>
+          <li>Collaborated with teams to streamline application deployments with Docker and Kubernetes.</li>
+        </ul>
+      </li>
+    </ul>
+  </section>
+
+  <!-- Skills Section -->
+  <section>
+    <h3>Skills</h3>
+    <ul>
+      <li>Jenkins, Docker, Kubernetes</li>
+      <li>Terraform, Ansible, Shell Scripting</li>
+      <li>AWS Services: EC2, S3, Lambda, IAM, VPC</li>
+      <li>Monitoring: CloudWatch, Prometheus</li>
+    </ul>
+  </section>
+
+  <!-- Contact Form -->
+  <section>
+    <h3>Contact Me</h3>
+    <form id="contact-form">
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" required>
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required>
+
+      <label for="message">Message:</label>
+      <textarea id="message" name="message" rows="5" required></textarea>
+
+      <button type="submit">Send</button>
+    </form>
+  </section>
+
+  <!-- Visitor Count -->
+  <section>
+    <h3>Visitor Count</h3>
+    <p>Number of visitors: <span id="visit-count">Loading...</span></p>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2024 Sai Kiran Danda | <a href="https://www.linkedin.com/in/sai-kiran-danda-kiraag/" target="_blank">LinkedIn</a></p>
+  </footer>
+
+  <!-- JavaScript -->
+  <script>
+    // Fetch visitor count
+    fetch('https://pojpf9dfx2.execute-api.us-east-1.amazonaws.com/GET/api/visitor-count')
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById('visit-count').textContent = data.visitCount;
+      })
+      .catch(error => console.error('Error fetching visitor count:', error));
+
+    // Handle contact form submission
+    document.getElementById('contact-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const message = document.getElementById('message').value;
+
+      fetch('https://pojpf9dfx2.execute-api.us-east-1.amazonaws.com/POST/api/send-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, email, message }),
+      })
+        .then(response => {
+          if (response.ok) {
+            alert('Message sent successfully!');
+            document.getElementById('contact-form').reset();
+          } else {
+            alert('Failed to send message. Please try again later.');
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('Failed to send message. Please try again later.');
+        });
+    });
+  </script>
+</body>
+</html>
